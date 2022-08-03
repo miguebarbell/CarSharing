@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Car_Sharing.iml" filepath="$PROJECT_DIR$/.idea/modules/Car_Sharing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Topics/Function composition/Disjunct all/Car_Sharing.Topics-Function_composition-Disjunct_all.iml" filepath="$PROJECT_DIR$/.idea/modules/Topics/Function composition/Disjunct all/Car_Sharing.Topics-Function_composition-Disjunct_all.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Topics/Function composition/Disjunct all/Car_Sharing.Topics-Function_composition-Disjunct_all.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Topics/Function composition/Disjunct all/Car_Sharing.Topics-Function_composition-Disjunct_all.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Topics/Function composition/Disjunct all/Car_Sharing.Topics-Function_composition-Disjunct_all.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Topics/Function composition/Disjunct all/Car_Sharing.Topics-Function_composition-Disjunct_all.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Topics/Function composition/Theory/Car_Sharing.Topics-Function_composition-Theory.iml" filepath="$PROJECT_DIR$/.idea/modules/Topics/Function composition/Theory/Car_Sharing.Topics-Function_composition-Theory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Topics/Function composition/Theory/Car_Sharing.Topics-Function_composition-Theory.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Topics/Function composition/Theory/Car_Sharing.Topics-Function_composition-Theory.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Topics/Function composition/Theory/Car_Sharing.Topics-Function_composition-Theory.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Topics/Function composition/Theory/Car_Sharing.Topics-Function_composition-Theory.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/Car_Sharing.util.iml" filepath="$PROJECT_DIR$/.idea/modules/util/Car_Sharing.util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/Car_Sharing.util.main.iml" filepath="$PROJECT_DIR$/.idea/modules/util/Car_Sharing.util.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/Car_Sharing.util.test.iml" filepath="$PROJECT_DIR$/.idea/modules/util/Car_Sharing.util.test.iml" />
+    </modules>
+  </component>
+</project>
