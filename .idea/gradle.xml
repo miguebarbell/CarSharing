@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
@@ -9,8 +10,33 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Topics/Comparator/Comparing numbers" />
+            <option value="$PROJECT_DIR$/Topics/Comparator/Comparing values" />
+            <option value="$PROJECT_DIR$/Topics/Comparator/Method name" />
+            <option value="$PROJECT_DIR$/Topics/Comparator/Reverse sorting" />
+            <option value="$PROJECT_DIR$/Topics/Comparator/Sort users" />
+            <option value="$PROJECT_DIR$/Topics/Comparator/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Function composition/Determine the result" />
             <option value="$PROJECT_DIR$/Topics/Function composition/Disjunct all" />
+            <option value="$PROJECT_DIR$/Topics/Function composition/The chain of responsibility" />
             <option value="$PROJECT_DIR$/Topics/Function composition/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Function composition/What function is executed first" />
+            <option value="$PROJECT_DIR$/Topics/Functional data processing with streams/Count passwords" />
+            <option value="$PROJECT_DIR$/Topics/Functional data processing with streams/Create a stream from a list" />
+            <option value="$PROJECT_DIR$/Topics/Functional data processing with streams/Print elements of a stream" />
+            <option value="$PROJECT_DIR$/Topics/Functional data processing with streams/Statements about stream operations" />
+            <option value="$PROJECT_DIR$/Topics/Functional data processing with streams/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Stream filtering/Bad words detecting" />
+            <option value="$PROJECT_DIR$/Topics/Stream filtering/Omitting long strings" />
+            <option value="$PROJECT_DIR$/Topics/Stream filtering/Statements" />
+            <option value="$PROJECT_DIR$/Topics/Stream filtering/Theory" />
+            <option value="$PROJECT_DIR$/Topics/The Set interface/A subset of sorted set" />
+            <option value="$PROJECT_DIR$/Topics/The Set interface/Creating a set" />
+            <option value="$PROJECT_DIR$/Topics/The Set interface/Elements of a set" />
+            <option value="$PROJECT_DIR$/Topics/The Set interface/Output elements" />
+            <option value="$PROJECT_DIR$/Topics/The Set interface/Spell checker" />
+            <option value="$PROJECT_DIR$/Topics/The Set interface/The most suitable set" />
+            <option value="$PROJECT_DIR$/Topics/The Set interface/Theory" />
             <option value="$PROJECT_DIR$/util" />
           </set>
         </option>

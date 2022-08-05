@@ -1,2 +1,6 @@
 content:
 - Function composition
+- Comparator
+- The Set interface
+- Functional data processing with streams
+- Stream filtering
