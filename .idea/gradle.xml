@@ -5,11 +5,13 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="delegatedBuild" value="false" />
+        <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Car Sharing/task" />
             <option value="$PROJECT_DIR$/Topics/Comparator/Comparing numbers" />
             <option value="$PROJECT_DIR$/Topics/Comparator/Comparing values" />
             <option value="$PROJECT_DIR$/Topics/Comparator/Method name" />
@@ -26,6 +28,18 @@
             <option value="$PROJECT_DIR$/Topics/Functional data processing with streams/Print elements of a stream" />
             <option value="$PROJECT_DIR$/Topics/Functional data processing with streams/Statements about stream operations" />
             <option value="$PROJECT_DIR$/Topics/Functional data processing with streams/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Map and flatMap/Maximum of the absolute values" />
+            <option value="$PROJECT_DIR$/Topics/Map and flatMap/Sorting the absolute values" />
+            <option value="$PROJECT_DIR$/Topics/Map and flatMap/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Parallel streams/Fix the sorting order" />
+            <option value="$PROJECT_DIR$/Topics/Parallel streams/Getting the greater speedup" />
+            <option value="$PROJECT_DIR$/Topics/Parallel streams/Inverting streams" />
+            <option value="$PROJECT_DIR$/Topics/Parallel streams/Myths and facts" />
+            <option value="$PROJECT_DIR$/Topics/Parallel streams/Prime numbers" />
+            <option value="$PROJECT_DIR$/Topics/Parallel streams/The ordered sequence" />
+            <option value="$PROJECT_DIR$/Topics/Parallel streams/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Reduction methods/Calculating factorials" />
+            <option value="$PROJECT_DIR$/Topics/Reduction methods/Theory" />
             <option value="$PROJECT_DIR$/Topics/Stream filtering/Bad words detecting" />
             <option value="$PROJECT_DIR$/Topics/Stream filtering/Omitting long strings" />
             <option value="$PROJECT_DIR$/Topics/Stream filtering/Statements" />

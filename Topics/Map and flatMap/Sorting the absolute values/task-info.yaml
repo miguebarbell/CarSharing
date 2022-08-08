@@ -1,0 +1,50 @@
+type: code
+files:
+- name: src/Main.java
+  visible: true
+  text: |-
+    import java.util.Arrays;
+    import java.util.Scanner;
+    import java.util.stream.Collectors;
+
+    public class Main {
+
+        /**
+         * Returns the sorted array of absolute numbers in ascending order.
+         *
+         * @param numbers the input array of String integer numbers
+         * @return the sorted array of integer absolute numbers
+         */
+        public static int[] sortedAbsNumbers(String[] numbers) {
+            // write your code here
+        }
+
+        // Don't change the code below
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println(Arrays.stream(sortedAbsNumbers(scanner.nextLine().split("\\s+")))
+                    .mapToObj(String::valueOf)
+                    .collect(Collectors.joining(" "))
+            );
+        }
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/3829#comment
+status: Failed
+feedback:
+  message: |
+    Failed test #1 of 7. Wrong answer
+
+    This is a sample test from the problem statement!
+
+    Test input:
+    1 2 6 -3 -9
+    Correct output:
+    1 2 3 6 9
+
+    Your code output:
+    Arrays.stream(numbers).map(Integer::parseInt).map(num -> Math.abs(num)).sorted() = [Ljava.lang.Object;@7291c18f
+    numbers = [Ljava.lang.String;@7cc355be
+    0 0 0 0 0
+  time: Sat, 06 Aug 2022 13:52:30 UTC
+record: -1
