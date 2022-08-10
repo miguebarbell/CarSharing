@@ -862,6 +862,257 @@ files:
         }
     }
   learner_created: false
+- name: src/carsharing/company/car/CarDAOImpl.java
+  visible: true
+  text: "package carsharing.company.car;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\
+    \npublic class CarDAOImpl implements CarDAO{\n\tprivate List<Car> cars = new ArrayList<>();\n\
+    \tprivate int currentId = 0;\n\t@Override\n\tpublic void addCar(String carName,\
+    \ int companyId) {\n\t\tcars.add(new Car(currentId, carName, companyId));\n\t\t\
+    currentId++;\n\t}\n\n\t@Override\n\tpublic List<Car> getAllCars() {\n\t\treturn\
+    \ cars;\n\t}\n}\n"
+  learner_created: true
+- name: src/carsharing/Menu.java
+  visible: true
+  text: "package carsharing;\n\nimport carsharing.company.Company;\nimport carsharing.company.car.Car;\n\
+    \nimport java.sql.SQLException;\nimport java.util.Comparator;\nimport java.util.List;\n\
+    import java.util.Scanner;\n\npublic class Menu {\n\tScanner in = new Scanner(System.in);\n\
+    \tDatabaseConnector database;\n\n\tpublic Menu(DatabaseConnector databaseConnector)\
+    \ throws SQLException {\n\t\tdatabase = databaseConnector;\n//\t\tmainMenu();\n\
+    \t}\n\n\tpublic void mainMenu() throws SQLException {\n\t\tSystem.out.println(\"\
+    \\n1. Log in as a manager\\n0. Exit\");\n\t\tint next = in.nextInt();\n\t\tswitch\
+    \ (next) {\n\t\t\tcase 1 -> managerMenu();\n\t\t\tcase 0 -> database.disconnect();\n\
+    \t\t}\n\t}\n\tpublic void managerMenu() throws SQLException {\n\t\tSystem.out.println(\"\
+    \\n1. Company list\\n2. Create a company\\n0. Back\");\n\t\tint next = in.nextInt();\n\
+    \t\tswitch (next) {\n\t\t\tcase 1 -> companyList();\n\t\t\tcase 2 -> createCompany();\n\
+    \t\t\tcase 0 -> mainMenu();\n\t\t}\n\t}\n\tpublic void companyList() throws SQLException\
+    \ {\n\t\t// print all companies created\n\t\tList<Company> response = database.companydao.getAllCompanies();\n\
+    \t\tresponse.sort(Comparator.comparing(Company::getID));\n\t\tif (response.size()\
+    \ > 0) {\n\t\t\tSystem.out.println(\"\\nChoose a company: \");\n\t\t\tint index\
+    \ = 1;\n\t\t\tfor (Company company : response) {\n\t\t\t\tSystem.out.println(index\
+    \ + \". \" + company.getCompanyName());\n\t\t\t\tindex++;\n\t\t\t}\n\t\t\tSystem.out.println(\"\
+    0. Back\");\n\t\t\tint companyIndex = in.nextInt();\n\t\t\tif (companyIndex ==\
+    \ 0) {\n\t\t\t\tmanagerMenu();\n\t\t\t} else carOptions(response.get(companyIndex\
+    \ - 1));\n\t\t} else System.out.println(\"\\nThe company list is empty!\");\n\t\
+    \tmanagerMenu();\n\t}\n\tpublic void carOptions(Company company) throws SQLException\
+    \ {\n\t\tSystem.out.println(\"\\n1. Car list\\n2. Create a car\\n0. Back\");\n\
+    \t\tint next = in.nextInt();\n\t\tswitch (next) {\n\t\t\tcase 0 -> managerMenu();\n\
+    //\t\t\tcase 0 -> companyList();\n\t\t\tcase 1 -> carList(company);\n\t\t\tcase\
+    \ 2 -> createCar(company);\n\t\t}\n\t}\n\n\tprivate void carList(Company company)\
+    \ throws SQLException {\n\t\tList<Car> cars = company.getCars();\n\t\tif (cars.size()\
+    \ == 0) System.out.println(\"\\nThe car list is empty!\");\n\t\telse {\n\t\tSystem.out.println(\"\
+    \\n\");\n\t\t\tint index = 1;\n\t\t\tfor (Car car : cars) {\n\t\t\t\tSystem.out.println(index\
+    \ + \". \" + car.getCarName());\n        index++;\n\t\t\t}\n\t\t}\n\t\tcarOptions(company);\n\
+    \n\t}\n\n\tpublic void createCar(Company company) throws SQLException {\n\n\t\t\
+    System.out.println(\"\\nEnter the car name:\");\n\t\tin.nextLine();\n\t\tString\
+    \ newCarName = in.nextLine();\n\t\tcompany.addCar(newCarName);\n\t\tString sql\
+    \ =\n\t\t\t\t\"INSERT INTO CAR (NAME, COMPANY_ID) VALUES ('\" + newCarName + \"\
+    ', (SELECT ID FROM COMPANY WHERE NAME='\" + company.getCompanyName() +\n\t\t\t\
+    \t\t\t\"'));\";\n\t\tdatabase.executeQuery(sql);\n\t\tSystem.out.println(\"\\\
+    nThe car was added!\");\n\t\tcarOptions(company);\n\t}\n\tpublic void createCompany()\
+    \ throws SQLException {\n\t\tSystem.out.println(\"\\nEnter the company name: \"\
+    );\n\t\tin.nextLine();\n\t\tString newCompanyName = in.nextLine();\n\t\tdatabase.companydao.addCompany(newCompanyName);\n\
+    \t\tString sql = \"INSERT INTO COMPANY (NAME) VALUES ('\" + newCompanyName + \"\
+    ');\";\n\t\tdatabase.executeQuery(sql);\n\t\tSystem.out.println(\"\\nThe company\
+    \ was created!\");\n\t\tmanagerMenu();\n\t}\n}\n"
+  learner_created: true
+- name: src/carsharing/company/CompanyDAOImpl.java
+  visible: true
+  text: "package carsharing.company;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\
+    \npublic class CompanyDAOImpl implements CompanyDAO {\n\tprivate List<Company>\
+    \ companies = new ArrayList<>();\n\tprivate int currentId = 0;\n\n\t@Override\n\
+    \tpublic void addCompany(String companyName) {\n\t\tcompanies.add(new Company(currentId,\
+    \ companyName));\n\t\tcurrentId++;\n\t}\n\n\t@Override\n\tpublic List<Company>\
+    \ getAllCompanies() {\n\n\t\treturn companies;\n\t}\n\n\t@Override\n\tpublic Company\
+    \ getCompanyById(int companyId) {\n\t\treturn companies.get(companyId);\n\t}\n\
+    \n\t@Override\n\tpublic void updateCompany(int companyId, String companyName)\
+    \ {\n\t\tcompanies.get(companyId).setCompanyName(companyName);\n\t\tSystem.out.println(\"\
+    Company \" + companyId + \" name has been updated to \" + companyName);\n\t}\n\
+    \n\t@Override\n\tpublic void deleteCompany(int companyId) {\n\t\tcompanies.remove(companyId);\n\
+    \    System.out.println(\"Company \" + companyId + \" has been deleted\");\n\t\
+    }\n}\n"
+  learner_created: true
+- name: src/carsharing/company/car/CarDAO.java
+  visible: true
+  text: "package carsharing.company.car;\n\nimport java.util.List;\n\npublic interface\
+    \ CarDAO {\n\tpublic void addCar(String carName, int companyId);\n\tpublic List<Car>\
+    \ getAllCars();\n}\n"
+  learner_created: true
+- name: src/carsharing/company/CompanyDAO.java
+  visible: true
+  text: "package carsharing.company;\n\nimport java.util.List;\n\npublic interface\
+    \ CompanyDAO {\n\tpublic void addCompany(String companyName);\n\tpublic List<Company>\
+    \ getAllCompanies();\n\tpublic Company getCompanyById(int companyId);\n\tpublic\
+    \ void updateCompany(int companyId, String companyName);\n\tpublic void deleteCompany(int\
+    \ companyId);\n}\n"
+  learner_created: true
+- name: src/carsharing/db/carsharing.trace.db
+  visible: true
+  text: "2022-08-09 16:19:40 jdbc[3]: exception\norg.h2.jdbc.JdbcSQLSyntaxErrorException:\
+    \ Syntax error in SQL statement \"CREATE TABLE IF NOT EXISTS CAR (ID INT PRIMARY\
+    \ KEY AUTO_INCREMENT, NAME VARCHAR UNIQUE NOT NULLCOMPANY_ID[*] INT NOT NULLFOREIGN\
+    \ KEY (COMPANY_ID) REFERENCES COMPANY(ID)\"; expected \"NULL\"; SQL statement:\n\
+    Create table IF NOT EXISTS CAR (ID int PRIMARY KEY AUTO_INCREMENT, NAME varchar\
+    \ UNIQUE NOT NULLCOMPANY_ID int NOT NULLFOREIGN KEY (COMPANY_ID) REFERENCES COMPANY(ID)\
+    \ [42001-200]\n2022-08-09 16:20:53 jdbc[3]: exception\norg.h2.jdbc.JdbcSQLSyntaxErrorException:\
+    \ Syntax error in SQL statement \"CREATE TABLE IF NOT EXISTS CAR (ID INT PRIMARY\
+    \ KEY AUTO_INCREMENT, NAME VARCHAR UNIQUE NOT NULL, COMPANY_ID INT NOT NULL, FOREIGN\
+    \ KEY (COMPANY_ID) REFERENCES COMPANY(ID)[*]\"; expected \"INDEX, ON, NOT, DEFERRABLE,\
+    \ NOCHECK, CHECK, ,, )\"; SQL statement:\nCreate table IF NOT EXISTS CAR (ID int\
+    \ PRIMARY KEY AUTO_INCREMENT, NAME varchar UNIQUE NOT NULL, COMPANY_ID int NOT\
+    \ NULL, FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY(ID) [42001-200]\n2022-08-09\
+    \ 18:06:57 jdbc[9]: exception\norg.h2.jdbc.JdbcSQLSyntaxErrorException: Column\
+    \ count does not match; SQL statement:\nINSERT INTO CAR (NAME) VALUES ('Hyundai\
+    \ Venue', '1') [21002-200]\n\tat org.h2.message.DbException.getJdbcSQLException(DbException.java:453)\n\
+    \tat org.h2.message.DbException.getJdbcSQLException(DbException.java:429)\n\t\
+    at org.h2.message.DbException.get(DbException.java:205)\n\tat org.h2.message.DbException.get(DbException.java:181)\n\
+    \tat org.h2.message.DbException.get(DbException.java:170)\n\tat org.h2.command.dml.Insert.prepare(Insert.java:319)\n\
+    \tat org.h2.command.Parser.prepareCommand(Parser.java:744)\n\tat org.h2.engine.Session.prepareLocal(Session.java:657)\n\
+    \tat org.h2.engine.Session.prepareCommand(Session.java:595)\n\tat org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1235)\n\
+    \tat org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:164)\n\
+    \tat org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126)\n\tat carsharing.DatabaseConnector.executeQuery(DatabaseConnector.java:66)\n\
+    \tat carsharing.Menu.createCar(Menu.java:86)\n\tat carsharing.Menu.carOptions(Menu.java:62)\n\
+    \tat carsharing.Menu.carList(Menu.java:76)\n\tat carsharing.Menu.carOptions(Menu.java:61)\n\
+    \tat carsharing.Menu.companyList(Menu.java:52)\n\tat carsharing.Menu.managerMenu(Menu.java:32)\n\
+    \tat carsharing.Menu.createCompany(Menu.java:98)\n\tat carsharing.Menu.managerMenu(Menu.java:33)\n\
+    \tat carsharing.Menu.createCompany(Menu.java:98)\n\tat carsharing.Menu.managerMenu(Menu.java:33)\n\
+    \tat carsharing.Menu.mainMenu(Menu.java:24)\n\tat carsharing.Main.main(Main.java:9)\n\
+    \tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\
+    \tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\n\
+    \tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\
+    \tat java.base/java.lang.reflect.Method.invoke(Method.java:568)\n\tat org.hyperskill.hstest.testing.execution.MainMethodExecutor.invokeMain(MainMethodExecutor.java:172)\n\
+    \tat org.hyperskill.hstest.testing.execution.MainMethodExecutor.lambda$launch$0(MainMethodExecutor.java:199)\n\
+    \tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)\n\
+    \tat java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)\n\tat\
+    \ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\n\
+    \tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\n\
+    \tat java.base/java.lang.Thread.run(Thread.java:833)\n2022-08-09 18:09:42 jdbc[9]:\
+    \ exception\norg.h2.jdbc.JdbcSQLSyntaxErrorException: Column count does not match;\
+    \ SQL statement:\nINSERT INTO CAR (NAME) VALUES ('Hyundai Venue', '0') [21002-200]\n\
+    \tat org.h2.message.DbException.getJdbcSQLException(DbException.java:453)\n\t\
+    at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)\n\tat\
+    \ org.h2.message.DbException.get(DbException.java:205)\n\tat org.h2.message.DbException.get(DbException.java:181)\n\
+    \tat org.h2.message.DbException.get(DbException.java:170)\n\tat org.h2.command.dml.Insert.prepare(Insert.java:319)\n\
+    \tat org.h2.command.Parser.prepareCommand(Parser.java:744)\n\tat org.h2.engine.Session.prepareLocal(Session.java:657)\n\
+    \tat org.h2.engine.Session.prepareCommand(Session.java:595)\n\tat org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1235)\n\
+    \tat org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:164)\n\
+    \tat org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126)\n\tat carsharing.DatabaseConnector.executeQuery(DatabaseConnector.java:66)\n\
+    \tat carsharing.Menu.createCar(Menu.java:86)\n\tat carsharing.Menu.carOptions(Menu.java:62)\n\
+    \tat carsharing.Menu.carList(Menu.java:76)\n\tat carsharing.Menu.carOptions(Menu.java:61)\n\
+    \tat carsharing.Menu.companyList(Menu.java:52)\n\tat carsharing.Menu.managerMenu(Menu.java:32)\n\
+    \tat carsharing.Menu.createCompany(Menu.java:98)\n\tat carsharing.Menu.managerMenu(Menu.java:33)\n\
+    \tat carsharing.Menu.createCompany(Menu.java:98)\n\tat carsharing.Menu.managerMenu(Menu.java:33)\n\
+    \tat carsharing.Menu.mainMenu(Menu.java:24)\n\tat carsharing.Main.main(Main.java:9)\n\
+    \tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\
+    \tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\n\
+    \tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\
+    \tat java.base/java.lang.reflect.Method.invoke(Method.java:568)\n\tat org.hyperskill.hstest.testing.execution.MainMethodExecutor.invokeMain(MainMethodExecutor.java:172)\n\
+    \tat org.hyperskill.hstest.testing.execution.MainMethodExecutor.lambda$launch$0(MainMethodExecutor.java:199)\n\
+    \tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)\n\
+    \tat java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)\n\tat\
+    \ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\n\
+    \tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\n\
+    \tat java.base/java.lang.Thread.run(Thread.java:833)\n2022-08-09 18:14:43 jdbc[9]:\
+    \ exception\norg.h2.jdbc.JdbcSQLSyntaxErrorException: Column count does not match;\
+    \ SQL statement:\nINSERT INTO CAR (NAME) VALUES ('Hyundai Venue', (SELECT NAME\
+    \ FROM COMPANY WHERE NAME='Car To Go')) [21002-200]\n\tat org.h2.message.DbException.getJdbcSQLException(DbException.java:453)\n\
+    \tat org.h2.message.DbException.getJdbcSQLException(DbException.java:429)\n\t\
+    at org.h2.message.DbException.get(DbException.java:205)\n\tat org.h2.message.DbException.get(DbException.java:181)\n\
+    \tat org.h2.message.DbException.get(DbException.java:170)\n\tat org.h2.command.dml.Insert.prepare(Insert.java:319)\n\
+    \tat org.h2.command.Parser.prepareCommand(Parser.java:744)\n\tat org.h2.engine.Session.prepareLocal(Session.java:657)\n\
+    \tat org.h2.engine.Session.prepareCommand(Session.java:595)\n\tat org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1235)\n\
+    \tat org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:164)\n\
+    \tat org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:126)\n\tat carsharing.DatabaseConnector.executeQuery(DatabaseConnector.java:66)\n\
+    \tat carsharing.Menu.createCar(Menu.java:88)\n\tat carsharing.Menu.carOptions(Menu.java:62)\n\
+    \tat carsharing.Menu.carList(Menu.java:76)\n\tat carsharing.Menu.carOptions(Menu.java:61)\n\
+    \tat carsharing.Menu.companyList(Menu.java:52)\n\tat carsharing.Menu.managerMenu(Menu.java:32)\n\
+    \tat carsharing.Menu.createCompany(Menu.java:100)\n\tat carsharing.Menu.managerMenu(Menu.java:33)\n\
+    \tat carsharing.Menu.createCompany(Menu.java:100)\n\tat carsharing.Menu.managerMenu(Menu.java:33)\n\
+    \tat carsharing.Menu.mainMenu(Menu.java:24)\n\tat carsharing.Main.main(Main.java:9)\n\
+    \tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\
+    \tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\n\
+    \tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\
+    \tat java.base/java.lang.reflect.Method.invoke(Method.java:568)\n\tat org.hyperskill.hstest.testing.execution.MainMethodExecutor.invokeMain(MainMethodExecutor.java:172)\n\
+    \tat org.hyperskill.hstest.testing.execution.MainMethodExecutor.lambda$launch$0(MainMethodExecutor.java:199)\n\
+    \tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)\n\
+    \tat java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)\n\tat\
+    \ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\n\
+    \tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\n\
+    \tat java.base/java.lang.Thread.run(Thread.java:833)\n2022-08-09 18:16:20 jdbc[9]:\
+    \ exception\norg.h2.jdbc.JdbcSQLDataException: Data conversion error converting\
+    \ \"'Car To Go' (CAR: \"\"COMPANY_ID\"\" INT NOT NULL)\"; SQL statement:\nINSERT\
+    \ INTO CAR (NAME, COMPANY_ID) VALUES ('Hyundai Venue', (SELECT NAME FROM COMPANY\
+    \ WHERE NAME='Car To Go')); [22018-200]\n"
+  learner_created: true
+- name: src/carsharing/DatabaseConnector.java
+  visible: true
+  text: "package carsharing;\n\nimport carsharing.company.CompanyDAOImpl;\n\nimport\
+    \ java.sql.Connection;\nimport java.sql.DriverManager;\nimport java.sql.SQLException;\n\
+    import java.sql.Statement;\n\npublic class DatabaseConnector {\n\tpublic CompanyDAOImpl\
+    \ companydao = new CompanyDAOImpl();\n\tprivate String companyTable =\n\t\t\t\"\
+    Create table IF NOT EXISTS COMPANY (ID int PRIMARY KEY AUTO_INCREMENT, NAME varchar(50)\
+    \ UNIQUE NOT NULL)\";\n\tprivate String carTable = \"Create table IF NOT EXISTS\
+    \ CAR (\" +\n\t\t\t\"ID int PRIMARY KEY AUTO_INCREMENT, \" +\n\t\t\t\"NAME varchar\
+    \ UNIQUE NOT NULL, \" +\n\t\t\t\"COMPANY_ID int NOT NULL, \" +\n\t\t\t\"FOREIGN\
+    \ KEY (COMPANY_ID) REFERENCES COMPANY(ID))\";\n\tprivate String JDBC_DRIVER =\
+    \ \"org.h2.Driver\";\n\tprivate String JDBC_URL = \"jdbc:h2:file:./src/carsharing/db/anything\"\
+    ;\n\n\tprivate Connection connection = null;\n\tprivate Statement statement =\
+    \ null;\n\tpublic DatabaseConnector(String[] args) {\n\t\tif (args.length >=2\
+    \ && args[0].equals(\"-databaseFileName\")) {\n\t\t\tthis.JDBC_URL = \"jdbc:h2:file:./src/carsharing/db/\"\
+    \ + args[1];\n\t\t}\n\t\tconnect();\n//\t\ttry {\n//\t\t\tClass.forName(JDBC_DRIVER);\n\
+    //\t\t\tconnection = DriverManager.getConnection(JDBC_URL);\n//\t\t\tSystem.out.println(\"\
+    Connected to H2 in-memory database.\");\n//\t\t\tStatement statement = connection.createStatement();\n\
+    //\t\t\tstatement.executeUpdate(sql);\n//\t\t\tconnection.setAutoCommit(true);\n\
+    //\t\t\tstatement.close();\n//\t\t\tconnection.close();\n//\t\t} catch (ClassNotFoundException\
+    \ e) {\n//\t\t\tthrow new RuntimeException(e);\n//\t\t} catch (SQLException e)\
+    \ {\n//\t\t\te.printStackTrace();\n//\t\t}\n\t}\n\tvoid connect() {\n\t\ttry {\n\
+    \t\t\tClass.forName(JDBC_DRIVER);\n\t\t\tconnection = DriverManager.getConnection(JDBC_URL);\n\
+    //\t\t\tSystem.out.println(\"Connected to H2 in-memory database.\");\n\t\t\tstatement\
+    \ = connection.createStatement();\n\t\t\tconnection.setAutoCommit(true);\n\t\t\
+    \texecuteQuery(this.companyTable);\n\t\t\texecuteQuery(this.carTable);\n\t\t}\
+    \ catch (ClassNotFoundException e) {\n\t\t\tthrow new RuntimeException(e);\n\t\
+    \t} catch (SQLException e) {\n\t\t\tthrow new RuntimeException(e);\n\t\t}\n\t\
+    }\n\tvoid disconnect() throws SQLException {\n//\t\tSystem.out.println(\"Disconnecting...\"\
+    );\n\t\tstatement.close();\n\t\tconnection.close();\n//\t\tSystem.out.println(\"\
+    Disconnected from database.\");\n\t}\n\tvoid executeQuery(String sql) throws SQLException\
+    \ {\n\t\tstatement.executeUpdate(sql);\n\t}\n\n\n\n}\n"
+  learner_created: true
+- name: src/carsharing/company/Company.java
+  visible: true
+  text: "package carsharing.company;\n\nimport carsharing.company.car.Car;\nimport\
+    \ carsharing.company.car.CarDAOImpl;\n\nimport java.util.List;\n\npublic class\
+    \ Company {\n\tpublic void setCompanyName(String companyName) {\n\t\tthis.companyName\
+    \ = companyName;\n\t}\n\n\tprivate String companyName;\n\tprivate CarDAOImpl cars\
+    \ = new CarDAOImpl();\n\n\tpublic String getCompanyName() {\n\t\treturn companyName;\n\
+    \t}\n\n\tpublic int getID() {\n\t\treturn ID;\n\t}\n\n\tprivate int ID;\n\n\t\
+    public Company(int ID, String companyName) {\n\t\tthis.companyName = companyName;\n\
+    \t\tthis.ID = ID;\n\t}\n\tpublic Company(String companyName) {\n\t\tthis.companyName\
+    \ = companyName;\n\t}\n\n\t@Override\n\tpublic String toString() {\n\t\treturn\
+    \ \"Company{\" +\n\t\t\t\t\"companyName='\" + companyName + '\\'' +\n\t\t\t\t\"\
+    , ID=\" + ID +\n\t\t\t\t'}';\n\t}\n\tpublic List<Car> getCars() {\n\t\treturn\
+    \ cars.getAllCars();\n\t}\n\tpublic void addCar(String name) {\n\t\tcars.addCar(name,\
+    \ ID);\n\t}\n}\n"
+  learner_created: true
+- name: src/carsharing/company/car/Car.java
+  visible: true
+  text: "package carsharing.company.car;\n\npublic class Car {\n\n\n\tprivate int\
+    \ id;\n\tprivate int companyId;\n\n\tpublic String getCarName() {\n\t\treturn\
+    \ carName;\n\t}\n\n\tprivate final String carName;\n\n\tpublic Car(int id, String\
+    \ carName, int companyId) {\n\t\tthis.id = id;\n    this.carName = carName;\n\t\
+    }\n\n}\n"
+  learner_created: true
+- name: src/carsharing/company/customer/Customer.java
+  visible: true
+  learner_created: true
+- name: src/carsharing/company/customer/CustomerDAO.java
+  visible: true
+  learner_created: true
+- name: src/carsharing/company/customer/CustomerDAOImpl.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11504#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">JetBrains
+    Academy</a> to continue learning.
+  time: Wed, 10 Aug 2022 16:50:24 UTC
 record: -1

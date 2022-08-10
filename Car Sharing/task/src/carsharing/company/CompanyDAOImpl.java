@@ -1,4 +1,4 @@
-package carsharing;
+package carsharing.company;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	@Override
 	public void addCompany(String companyName) {
-		currentId++;
 		companies.add(new Company(currentId, companyName));
-
+		currentId++;
 	}
 
 	@Override

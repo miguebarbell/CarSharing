@@ -1,4 +1,9 @@
-package carsharing;
+package carsharing.company;
+
+import carsharing.company.car.Car;
+import carsharing.company.car.CarDAOImpl;
+
+import java.util.List;
 
 public class Company {
 	public void setCompanyName(String companyName) {
@@ -6,6 +11,7 @@ public class Company {
 	}
 
 	private String companyName;
+	private CarDAOImpl cars = new CarDAOImpl();
 
 	public String getCompanyName() {
 		return companyName;
@@ -31,5 +37,11 @@ public class Company {
 				"companyName='" + companyName + '\'' +
 				", ID=" + ID +
 				'}';
+	}
+	public List<Car> getCars() {
+		return cars.getAllCars();
+	}
+	public void addCar(String name) {
+		cars.addCar(name, ID, companyName);
 	}
 }

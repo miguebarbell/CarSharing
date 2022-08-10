@@ -555,6 +555,112 @@ files:
         }
     }
   learner_created: false
+- name: src/carsharing/Menu.java
+  visible: true
+  text: "package carsharing;\n\nimport java.sql.SQLException;\nimport java.util.Comparator;\n\
+    import java.util.List;\nimport java.util.Scanner;\n\npublic class Menu {\n\tScanner\
+    \ in = new Scanner(System.in);\n\tDatabaseConnector database;\n\n\tpublic Menu(DatabaseConnector\
+    \ databaseConnector) throws SQLException {\n\t\tdatabase = databaseConnector;\n\
+    //\t\tmainMenu();\n\t}\n\n\tpublic void mainMenu() throws SQLException {\n\t\t\
+    System.out.println(\"1. Log in as a manager\\n0. Exit\");\n\t\tint next = in.nextInt();\n\
+    \t\tswitch (next) {\n\t\t\tcase 1:\n\t\t\t\tmanagerMenu();\n\t\t\tcase 0:\n\t\t\
+    \t\tdatabase.disconnect();\n\t\t}\n\t}\n\tpublic void managerMenu() throws SQLException\
+    \ {\n\t\tSystem.out.println(\"1. Company list\\n2. Create a company\\n0. Back\"\
+    );\n\t\tint next = in.nextInt();\n\t\tswitch (next) {\n\t\t\tcase 1:\n\t\t\t\t\
+    companyList();\n\t\t\tcase 2:\n\t\t\t\tcreateCompany();\n\t\t\tcase 0:\n\t\t\t\
+    \tmainMenu();\n\t\t}\n\t}\n\tpublic void companyList() throws SQLException {\n\
+    \t\t// print all companies created\n\t\tList<Company> response = database.companydao.getAllCompanies();\n\
+    \t\tresponse.sort(Comparator.comparing(Company::getID));\n\t\tif (response.size()\
+    \ > 0) {\n\t\t\tfor (Company company : response) {\n\t\t\t\tSystem.out.println(company.getID()\
+    \ + \". \" + company.getCompanyName());\n\t\t}\n\t\t} else System.out.println(\"\
+    The company list is empty!\");\n//\t\tString sql = \"\";\n//\t\tdatabase.execute(sql);\n\
+    \t\tmanagerMenu();\n\t}\n\tpublic void createCompany() throws SQLException {\n\
+    \t\tSystem.out.println(\"Enter the company name: \");\n\t\tin.nextLine();\n\t\t\
+    String newCompanyName = in.nextLine();\n\t\tdatabase.companydao.addCompany(newCompanyName);\n\
+    \t\tString sql = \"INSERT INTO COMPANY (NAME) VALUES ('\" + newCompanyName + \"\
+    ')\";\n\t\tdatabase.executeQuery(sql);\n\t\tSystem.out.println(\"The company was\
+    \ created!\");\n\t\tmanagerMenu();\n\t}\n}\n"
+  learner_created: true
+- name: src/carsharing/DatabaseConnector.java
+  visible: true
+  text: "package carsharing;\n\nimport java.sql.Connection;\nimport java.sql.DriverManager;\n\
+    import java.sql.SQLException;\nimport java.sql.Statement;\n\npublic class DatabaseConnector\
+    \ {\n\tpublic CompanyDAOImpl companydao = new CompanyDAOImpl();\n\tprivate String\
+    \ sql =\n\t\t\t\"Create table IF NOT EXISTS COMPANY (ID int PRIMARY KEY AUTO_INCREMENT,\
+    \ NAME varchar(50) UNIQUE NOT NULL)\";\n\tprivate String JDBC_DRIVER = \"org.h2.Driver\"\
+    ;\n\tprivate String JDBC_URL = \"jdbc:h2:file:./src/carsharing/db/anything\";\n\
+    \n\tprivate Connection connection = null;\n\tprivate Statement statement = null;\n\
+    \tpublic DatabaseConnector(String[] args) {\n\t\tif (args.length >=2 && args[0].equals(\"\
+    -databaseFileName\")) {\n\t\t\tthis.JDBC_URL = \"jdbc:h2:file:./src/carsharing/db/\"\
+    \ + args[1];\n\t\t}\n\t\tconnect();\n//\t\ttry {\n//\t\t\tClass.forName(JDBC_DRIVER);\n\
+    //\t\t\tconnection = DriverManager.getConnection(JDBC_URL);\n//\t\t\tSystem.out.println(\"\
+    Connected to H2 in-memory database.\");\n//\t\t\tStatement statement = connection.createStatement();\n\
+    //\t\t\tstatement.executeUpdate(sql);\n//\t\t\tconnection.setAutoCommit(true);\n\
+    //\t\t\tstatement.close();\n//\t\t\tconnection.close();\n//\t\t} catch (ClassNotFoundException\
+    \ e) {\n//\t\t\tthrow new RuntimeException(e);\n//\t\t} catch (SQLException e)\
+    \ {\n//\t\t\te.printStackTrace();\n//\t\t}\n\t}\n\tvoid connect() {\n\t\ttry {\n\
+    \t\t\tClass.forName(JDBC_DRIVER);\n\t\t\tconnection = DriverManager.getConnection(JDBC_URL);\n\
+    //\t\t\tSystem.out.println(\"Connected to H2 in-memory database.\");\n\t\t\tstatement\
+    \ = connection.createStatement();\n\t\t\tconnection.setAutoCommit(true);\n\t\t\
+    \texecuteQuery(this.sql);\n\n\t\t} catch (ClassNotFoundException e) {\n\t\t\t\
+    throw new RuntimeException(e);\n\t\t} catch (SQLException e) {\n\t\t\tthrow new\
+    \ RuntimeException(e);\n\t\t}\n\t}\n\tvoid disconnect() throws SQLException {\n\
+    //\t\tSystem.out.println(\"Disconnecting...\");\n\t\tstatement.close();\n\t\t\
+    connection.close();\n//\t\tSystem.out.println(\"Disconnected from database.\"\
+    );\n\t}\n\tvoid executeQuery(String sql) throws SQLException {\n\t\tstatement.executeUpdate(sql);\n\
+    \t}\n\n\n\n}\n"
+  learner_created: true
+- name: src/carsharing/company/Company.java
+  visible: true
+  text: "package carsharing;\n\npublic class Company {\n\tpublic void setCompanyName(String\
+    \ companyName) {\n\t\tthis.companyName = companyName;\n\t}\n\n\tprivate String\
+    \ companyName;\n\n\tpublic String getCompanyName() {\n\t\treturn companyName;\n\
+    \t}\n\n\tpublic int getID() {\n\t\treturn ID;\n\t}\n\n\tprivate int ID;\n\n\t\
+    public Company(int ID, String companyName) {\n\t\tthis.companyName = companyName;\n\
+    \t\tthis.ID = ID;\n\t}\n\tpublic Company(String companyName) {\n\t\tthis.companyName\
+    \ = companyName;\n\t}\n\n\t@Override\n\tpublic String toString() {\n\t\treturn\
+    \ \"Company{\" +\n\t\t\t\t\"companyName='\" + companyName + '\\'' +\n\t\t\t\t\"\
+    , ID=\" + ID +\n\t\t\t\t'}';\n\t}\n}\n"
+  learner_created: true
+- name: src/carsharing/company/CompanyDAO.java
+  visible: true
+  text: "package carsharing;\n\nimport java.util.List;\n\npublic interface CompanyDAO\
+    \ {\n\tpublic void addCompany(String companyName);\n\tpublic List<Company> getAllCompanies();\n\
+    \tpublic Company getCompanyById(int companyId);\n\tpublic void updateCompany(int\
+    \ companyId, String companyName);\n\tpublic void deleteCompany(int companyId);\n\
+    }\n"
+  learner_created: true
+- name: src/carsharing/company/CompanyDAOImpl.java
+  visible: true
+  text: "package carsharing;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\
+    \npublic class CompanyDAOImpl implements CompanyDAO {\n\tprivate List<Company>\
+    \ companies = new ArrayList<>();\n\tprivate int currentId = 0;\n\n\t@Override\n\
+    \tpublic void addCompany(String companyName) {\n\t\tcurrentId++;\n\t\tcompanies.add(new\
+    \ Company(currentId, companyName));\n\n\t}\n\n\t@Override\n\tpublic List<Company>\
+    \ getAllCompanies() {\n\n\t\treturn companies;\n\t}\n\n\t@Override\n\tpublic Company\
+    \ getCompanyById(int companyId) {\n\t\treturn companies.get(companyId);\n\t}\n\
+    \n\t@Override\n\tpublic void updateCompany(int companyId, String companyName)\
+    \ {\n\t\tcompanies.get(companyId).setCompanyName(companyName);\n\t\tSystem.out.println(\"\
+    Company \" + companyId + \" name has been updated to \" + companyName);\n\t}\n\
+    \n\t@Override\n\tpublic void deleteCompany(int companyId) {\n\t\tcompanies.remove(companyId);\n\
+    \    System.out.println(\"Company \" + companyId + \" has been deleted\");\n\t\
+    }\n}\n"
+  learner_created: true
+- name: src/carsharing/company/car/Car.java
+  visible: true
+  learner_created: true
+- name: src/carsharing/company/car/CarDAO.java
+  visible: true
+  learner_created: true
+- name: src/carsharing/company/car/CarDAOImpl.java
+  visible: true
+  learner_created: true
+- name: src/carsharing/db/carsharing.trace.db
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11503#comment
-status: Unchecked
-record: -1
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Tue, 09 Aug 2022 22:31:00 UTC
+record: 3

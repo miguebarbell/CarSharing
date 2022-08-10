@@ -1,14 +1,27 @@
 package carsharing;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import carsharing.company.CompanyDAOImpl;
+import carsharing.company.customer.CustomerDAO;
+import carsharing.company.customer.CustomerDAOImpl;
+
+import java.sql.*;
 
 public class DatabaseConnector {
-	public CompanyDAOImpl companydao = new CompanyDAOImpl();
-	private String sql =
+//	public CompanyDAOImpl companydao = new CompanyDAOImpl();
+//	public CustomerDAO customerdao = new CustomerDAOImpl();
+//	private String dropAllTables = "DROP TABLE IF EXISTS COMPANY, CAR, CUSTOMER";
+	private String companyTable =
 			"Create table IF NOT EXISTS COMPANY (ID int PRIMARY KEY AUTO_INCREMENT, NAME varchar(50) UNIQUE NOT NULL)";
+	private String carTable = "Create table IF NOT EXISTS CAR (" +
+			"ID int PRIMARY KEY AUTO_INCREMENT, " +
+			"NAME varchar UNIQUE NOT NULL, " +
+			"COMPANY_ID int NOT NULL, " +
+			"FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY(ID))";
+	private String customerTable = "Create table IF NOT EXISTS CUSTOMER (" +
+			"ID int PRIMARY KEY AUTO_INCREMENT, " +
+			"NAME varchar UNIQUE NOT NULL, " +
+			"RENTED_CAR_ID int, " +
+			"FOREIGN KEY (RENTED_CAR_ID) REFERENCES CAR(ID))";
 	private String JDBC_DRIVER = "org.h2.Driver";
 	private String JDBC_URL = "jdbc:h2:file:./src/carsharing/db/anything";
 
@@ -34,6 +47,11 @@ public class DatabaseConnector {
 //			e.printStackTrace();
 //		}
 	}
+
+	public Statement getStatement() {
+		return statement;
+	}
+
 	void connect() {
 		try {
 			Class.forName(JDBC_DRIVER);
@@ -41,8 +59,9 @@ public class DatabaseConnector {
 //			System.out.println("Connected to H2 in-memory database.");
 			statement = connection.createStatement();
 			connection.setAutoCommit(true);
-			executeQuery(this.sql);
-
+			executeUpdate(this.companyTable);
+			executeUpdate(this.carTable);
+			executeUpdate(this.customerTable);
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		} catch (SQLException e) {
@@ -55,8 +74,11 @@ public class DatabaseConnector {
 		connection.close();
 //		System.out.println("Disconnected from database.");
 	}
-	void executeQuery(String sql) throws SQLException {
+	void executeUpdate(String sql) throws SQLException {
 		statement.executeUpdate(sql);
+	}
+	ResultSet executeQuery(String sql) throws SQLException {
+		return statement.executeQuery(sql);
 	}
 
 
